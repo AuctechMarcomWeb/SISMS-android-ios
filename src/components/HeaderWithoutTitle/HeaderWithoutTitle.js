@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, StyleSheet, Platform } from 'react-native';
-import { wp, hp } from '../../utils/Functions/Responsive'; // adjust relative path as per your folder structure
+import { wp, hp } from '../../utils/Functions/Responsive';
 
 const HeaderWithoutTitle = () => {
   return (
@@ -19,12 +19,15 @@ export default HeaderWithoutTitle;
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: wp(4),
-    paddingVertical: hp(2.3),
+    paddingTop: Platform.OS === 'ios' ? hp(1) : hp(2),
+    paddingBottom: Platform.OS === 'ios' ? hp(1.2) : hp(2.3),
     backgroundColor: '#FFFFFF',
-
+    alignItems: 'left',
+    justifyContent: 'left',
   },
+
   logo: {
-    width: wp(30),
-    height: hp(5),
+    width: wp(28),
+    height: hp(4.2),
   },
 });

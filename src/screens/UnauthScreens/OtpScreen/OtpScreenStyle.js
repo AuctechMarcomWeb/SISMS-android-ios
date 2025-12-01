@@ -5,15 +5,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F0E8',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 6 : hp(0.5),
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
-    paddingBottom: hp(4),
+    paddingBottom: hp(2),
   },
-
   mainContent: {
     paddingHorizontal: wp(6),
     alignItems: 'center',
@@ -33,35 +31,35 @@ const styles = StyleSheet.create({
 
   textContainer: {
     width: '100%',
-    marginBottom: hp(3),
+    marginBottom: hp(2),
   },
 
   title: {
     fontSize: wp(5.4),
     fontWeight: '700',
     color: '#8B4513',
-    lineHeight: wp(7.4),
+    lineHeight: wp(4),
   },
 
   subtitle: {
     fontSize: wp(4.4),
     fontWeight: '600',
     color: '#8B4513',
-    marginTop: hp(0.8),
+    marginTop: hp(0.1),
   },
 
   dotsContainer: {
     flexDirection: 'row',
     gap: wp(2),
     marginTop: hp(2),
-    marginBottom: hp(4),
+    marginBottom: hp(2),
   },
 
   otpText: {
     fontSize: wp(4),
     fontWeight: '400',
     color: 'green',
-    marginBottom: hp(2),
+    marginBottom: hp(0.4),
   },
 
   loginButton: {
@@ -72,7 +70,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: hp(1),
-    marginBottom: hp(4),
+    marginBottom: Platform.OS === 'ios' ? hp(3) : hp(2),
+
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -85,7 +84,6 @@ const styles = StyleSheet.create({
       },
     }),
   },
-
   loginButtonText: {
     fontSize: wp(4.3),
     color: '#fff',
