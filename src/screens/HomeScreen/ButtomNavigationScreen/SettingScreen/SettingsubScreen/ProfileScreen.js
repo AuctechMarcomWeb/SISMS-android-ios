@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { UpdateUserDetails } from '../../../../../API/authAPI/authAPI';
+import { FetchUserDetails, UpdateUserDetails } from '../../../../../API/authAPI/authAPI';
 import { setUser, setUserId } from '../../../../../redux/slices/authSlice';
 import ScreenWrapper from '../../../../../components/safeAreaViewWrapper/ScreenWrapper';
 import { hp, wp } from '../../../../../utils/Functions/Responsive';
@@ -22,7 +22,7 @@ const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const UserDetails = useSelector(state => state?.auth?.user?.user_data);
   console.log('===userDetails', UserDetails);
-  const [phone] = useState(UserDetails?.phone); // Read only
+  const [phone] = useState(UserDetails?.phone);
   const [photo, setPhoto] = useState(UserDetails?.photo || null);
   const [name, setName] = useState(UserDetails?.name);
   const [email, setEmail] = useState(UserDetails?.email);
@@ -57,6 +57,21 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const updateProfile = async () => {
+    if (!name?.trim()) {
+      Alert.alert('Warning', 'Please enter your name');
+      return;
+    }
+
+    if (!email?.trim()) {
+      Alert.alert('Warning', 'Please enter your email');
+      return;
+    }
+
+    if (!gender) {
+      Alert.alert('Warning', 'Please select gender');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -79,24 +94,16 @@ const ProfileScreen = ({ navigation }) => {
       }
 
       const response = await UpdateUserDetails(formData);
-      console.log('📦 Updated profile response:', response.data);
 
       if (response?.status === 200 && response.data?.status === 200) {
-        const updatedUser = response?.data?.data;
-
-        dispatch(
-          setUser({
-            user_data: updatedUser,
-          }),
-        );
-
+        dispatch(setUser({ user_data: response.data.data }));
         Alert.alert('Success', 'Profile updated successfully');
         navigation.goBack();
       } else {
         Alert.alert('Error', response.data?.message || 'Something went wrong');
       }
-    } catch (err) {
-      console.log('❌ API Error =>', err);
+    } catch (error) {
+      console.log('❌ Error updating profile =>', error);
       Alert.alert('Failed', 'Something went wrong');
     } finally {
       setLoading(false);
@@ -131,7 +138,7 @@ const ProfileScreen = ({ navigation }) => {
         </View>
 
         {/* Phone number */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.inputContainer}
           onPress={() =>
             navigation.navigate('VerifyMobileNumber', {
@@ -141,7 +148,16 @@ const ProfileScreen = ({ navigation }) => {
         >
           <Text style={styles.inputText}>{phone}</Text>
           <Icon name="edit" size={20} color="#CDA15B" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputText}>{phone}</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('VerifyMobileNumber', { phone })}
+          >
+            {/* <Icon name="edit" size={20} color="#CDA15B"/> */}
+          </TouchableOpacity>
+        </View>
 
         {/* Name */}
         <View style={styles.inputContainer}>
@@ -194,7 +210,14 @@ const ProfileScreen = ({ navigation }) => {
           )}
         </View>
 
-        <TouchableOpacity style={styles.updateButton} onPress={updateProfile}>
+        <TouchableOpacity
+          style={[
+            styles.updateButton,
+            { opacity: name && email && gender ? 1 : 0.6 },
+          ]}
+          disabled={!name || !email || !gender}
+          onPress={updateProfile}
+        >
           <Text style={styles.updateText}>Update</Text>
         </TouchableOpacity>
       </ScrollView>

@@ -6,26 +6,48 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Platform,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Layout from '../../../../components/layout/layout';
 import { wp, hp } from '../../../../utils/Functions/Responsive';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../../../redux/slices/authSlice';
+import { logout, setUser } from '../../../../redux/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FetchUserDetails } from '../../../../API/authAPI/authAPI';
 
 const Setting = ({ navigation }) => {
   const dispatch = useDispatch();
   const UserDetails = useSelector(state => state?.auth?.user?.user_data);
-  console.log("user Data-----",UserDetails)
+
+  const fetchLatestUserDetails = async () => {
+    try {
+      const savedUserId = await AsyncStorage.getItem('userId');
+      console.log("====>",savedUserId)
+      if (!savedUserId) return;
+
+      const response = await FetchUserDetails({
+        userId: savedUserId,
+        offset: 0,
+      });
+
+      if (response?.user_data) {
+        dispatch(setUser(response));
+      }
+    } catch (error) {
+      console.log("❌ Error fetching user:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLatestUserDetails();
+  }, []);
+
   const handleMenuPress = async menuItem => {
     if (menuItem === 'Log Out') {
       try {
         await AsyncStorage.removeItem('token');
-        await AsyncStorage.removeItem('UserID');
+        await AsyncStorage.removeItem('userId');
         await AsyncStorage.removeItem('isAuthentication');
-
         dispatch(logout());
       } catch (error) {
         console.log('Logout error', error);
@@ -34,10 +56,6 @@ const Setting = ({ navigation }) => {
       navigation.navigate(menuItem);
     }
   };
-  console.log('UserDetails fetched from redux', UserDetails);
-useEffect(()=>{
-  UserDetails
-},[UserDetails])
   return (
     // <View style={styles.container}>
     <Layout>
