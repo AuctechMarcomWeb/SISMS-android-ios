@@ -96,14 +96,17 @@ const Home = ({ navigation }) => {
       const invoices = response?.data?.invoices || [];
 
       setFullData(invoices);
-      handlePagination(1); // Initialize first page
-
     } catch (error) {
       console.log('Error UserDetails:', error);
     } finally {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (fullData.length > 0) {
+      handlePagination(1); // auto show first page
+    }
+  }, [fullData]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 12;
@@ -206,19 +209,20 @@ const Home = ({ navigation }) => {
     }
   };
 
-  const handleSearch = (text = "") => {
-    console.log("search text:", text);
+  const handleSearch = (text = '') => {
+    console.log('search text:', text);
 
-    const query = typeof text === "string" ? text : "";
+    const query = typeof text === 'string' ? text : '';
 
     if (!query.trim()) {
-      handlePagination(1);  // reset pagination
+      handlePagination(1); // reset pagination
       return;
     }
 
-    const filtered = fullData.filter(item =>
-      item?.label?.toLowerCase().includes(query.toLowerCase()) ||
-      item?.file?.toLowerCase().includes(query.toLowerCase())
+    const filtered = fullData.filter(
+      item =>
+        item?.label?.toLowerCase().includes(query.toLowerCase()) ||
+        item?.file?.toLowerCase().includes(query.toLowerCase()),
     );
 
     setDisplayData(filtered.slice(0, limit));
@@ -277,7 +281,7 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      
+
       {/* Loader Overlay */}
       {loading && (
         <View style={styles.loaderOverlay}>

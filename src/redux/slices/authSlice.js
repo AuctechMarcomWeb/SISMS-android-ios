@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   token: null,
   userId: null,
-  user: null,    // ⭐ user data store here
+  user: null, //  user data store here
 };
 
 const authSlice = createSlice({
@@ -15,7 +15,7 @@ const authSlice = createSlice({
       const { token, userId, user } = action.payload;
       state.token = token;
       state.userId = userId;
-      state.user = user;   // ⭐ Save full user data after login
+      state.user = user; //  Save full user data after login
     },
     setToken(state, action) {
       state.token = action.payload;
@@ -23,7 +23,8 @@ const authSlice = createSlice({
     setUserId(state, action) {
       state.userId = action.payload;
     },
-    setUser(state, action) {   // ⭐ for profile update
+    setUser(state, action) {
+      //  for profile update
       state.user = action.payload;
     },
     logout(state) {
@@ -34,5 +35,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, setToken, setUserId, setUser, logout } = authSlice.actions;
+export const { login, setToken, setUserId, setUser, logout } =
+  authSlice.actions;
 export default authSlice.reducer;
