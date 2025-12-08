@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, Platform } from 'react-native';
 import React from 'react';
 import { wp, hp } from '../../../../../utils/Functions/Responsive';
 import ScreenWrapper from '../../../../../components/safeAreaViewWrapper/ScreenWrapper';
 
 const TermsConditions = () => {
   return (
-    <ScreenWrapper>
+    <ScreenWrapper style={{ paddingTop: 0 }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Image
@@ -18,7 +18,7 @@ const TermsConditions = () => {
         <ScrollView
           style={styles.scrollContainer}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{paddingBottom:'10%'}}
+          contentContainerStyle={styles.scrollContent}
         >
           <View style={styles.content}>
             <Text style={styles.title}>Terms & Conditions</Text>
@@ -171,12 +171,12 @@ export default TermsConditions;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     backgroundColor: '#ffffff',
   },
   header: {
     backgroundColor: '#ffffff',
-    paddingTop: hp(2),
+    paddingTop: Platform.OS === 'android' ? hp(2) : 0,
     paddingBottom: hp(2),
     paddingHorizontal: wp(5),
   },
@@ -185,32 +185,34 @@ const styles = StyleSheet.create({
     height: hp(5),
   },
   scrollContainer: {
-    // flex: 1,
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: hp(10),
   },
   content: {
     paddingHorizontal: wp(5),
     paddingVertical: hp(3),
-    paddingBottom: hp(10),
   },
   title: {
-    fontSize: wp(7),
+    fontSize: wp(6.5),
     fontWeight: 'bold',
-    color: '#B8860B', // Gold color matching the image
+    color: '#B8860B',
     textAlign: 'center',
-    marginBottom: hp(3),
+    marginBottom: hp(2.5),
   },
   welcomeText: {
     fontSize: wp(3.8),
     color: '#333333',
     lineHeight: wp(5.5),
-    marginBottom: hp(3),
+    marginBottom: hp(2.5),
     textAlign: 'justify',
   },
   sectionTitle: {
-    fontSize: wp(5),
+    fontSize: wp(4.5),
     fontWeight: 'bold',
     color: '#000000',
-    marginTop: hp(2.5),
+    marginTop: hp(2),
     marginBottom: hp(1.5),
   },
   subText: {

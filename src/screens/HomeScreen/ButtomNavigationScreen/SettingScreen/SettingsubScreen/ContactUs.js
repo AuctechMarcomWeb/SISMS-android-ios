@@ -5,11 +5,11 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
 import React, { useState } from 'react';
 import NormalHeader from '../../../../../components/NormalHeader/NormalHeader';
 import { wp, hp } from '../../../../../utils/Functions/Responsive';
-// import { Layout } from 'react-native-reanimated';
 import ScreenWrapper from '../../../../../components/safeAreaViewWrapper/ScreenWrapper';
 
 const ContactUs = () => {
@@ -29,16 +29,20 @@ const ContactUs = () => {
 
   const handleSubmit = () => {
     console.log('Form submitted:', formData);
+    // Add your form submission logic here
   };
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper style={{ paddingTop: 0 }}>
       <View style={styles.container}>
         <NormalHeader title={'Contact Us'} />
-
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView 
+          style={styles.content} 
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
           <Text style={styles.heading}>Get in Touch</Text>
-
+          
           <View style={styles.formContainer}>
             <TextInput
               style={styles.input}
@@ -85,6 +89,7 @@ const ContactUs = () => {
             <TouchableOpacity
               style={styles.submitButton}
               onPress={handleSubmit}
+              activeOpacity={0.8}
             >
               <Text style={styles.submitButtonText}>Submit Request</Text>
             </TouchableOpacity>
@@ -99,23 +104,27 @@ export default ContactUs;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     backgroundColor: '#ffffff',
   },
   content: {
-    // flex: 1,
+    flex: 1,
+  },
+  scrollContent: {
     paddingHorizontal: wp(5),
+    paddingBottom: hp(5),
   },
   heading: {
-    fontSize: wp(6), // Responsive heading
+    fontSize: wp(6),
     fontFamily: 'poppins_bold',
     fontWeight: '500',
     color: '#8B4513',
     textAlign: 'center',
-    marginVertical: hp(4),
+    marginTop: Platform.OS === 'android' ? hp(4) : hp(2),
+    marginBottom: hp(3),
   },
   formContainer: {
-    marginBottom: hp(5),
+    marginBottom: hp(3),
   },
   input: {
     backgroundColor: '#fff',
@@ -138,10 +147,19 @@ const styles = StyleSheet.create({
     paddingVertical: hp(2),
     alignItems: 'center',
     marginTop: hp(2.5),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   submitButtonText: {
     color: '#fff',
     fontSize: wp(4.5),
     fontWeight: '600',
+    letterSpacing: 0.5,
   },
 });
