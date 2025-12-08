@@ -1,6 +1,11 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+
   loaderOverlay: {
     position: 'absolute',
     top: 0,
@@ -12,118 +17,147 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 9999,
   },
+
+  titleBox: {
+    backgroundColor: '#e0cd8b',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+  },
+
   heading: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#887d66',
-    width: '100%',
   },
+
   headerRow: {
     flexDirection: 'row',
     paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#faf7ef',
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
+
   headerText: {
     fontWeight: 'bold',
+    fontSize: 13,
     textAlign: 'center',
   },
 
   card: {
-    backgroundColor: '#fff',
-    marginBottom: '1%',
-    padding: '2%',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
     flexDirection: 'row',
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
     alignItems: 'center',
-    gap: 6,
   },
+
   cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
+
   cardText: {
     flex: 1,
     fontSize: 12,
     color: '#333',
-    paddingRight: 10,
+    paddingHorizontal: 4,
   },
-  shareButton: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+
+  icon: {
+    width: 18,
+    height: 18,
+    marginRight: 8,
+    resizeMode: 'contain',
   },
+
   shareIconImage: {
     width: 20,
     height: 20,
+    resizeMode: 'contain',
   },
+
+  shareButton: {
+    padding: 4,
+  },
+
   emptyState: {
+    marginTop: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingHorizontal: 20,
   },
+
   emptyImage: {
     width: 100,
     height: 100,
-    marginBottom: 15,
-    resizeMode: 'contain',
+    marginBottom: 12,
   },
+
   emptyTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#444',
+    marginBottom: 4,
   },
+
   emptySubtitle: {
     fontSize: 13,
     color: '#888',
-    marginBottom: 20,
+    marginBottom: 16,
+    textAlign: 'center',
   },
-  paginationContainer: {
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  paddingVertical: 12,
-  backgroundColor: '#fff',
-},
-
-pageNumber: {
-  paddingVertical: 8,
-  paddingHorizontal: 14,
-  borderRadius: 10,
-  marginHorizontal: 5,
-  borderWidth: 1,
-  borderColor: '#c9b04e',
-  backgroundColor: '#fff',
-},
-
-activePage: {
-  backgroundColor: '#c9b04e',
-  borderColor: '#c9b04e',
-},
-
-pageNumberText: {
-  color: '#c9b04e',
-  fontSize: 16,
-  fontWeight: '500',
-},
-
-activePageText: {
-  color: '#fff',
-  fontWeight: '600',
-},
 
   uploadButton: {
     backgroundColor: '#e0cd8b',
-    paddingHorizontal: 20,
     paddingVertical: 10,
+    paddingHorizontal: 18,
     borderRadius: 6,
   },
+
   uploadButtonText: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontWeight: '700',
+  },
+
+  paginationWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 10,
+    marginVertical: 12,
+    alignItems: 'center',
+  },
+
+  pageNumber: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    marginHorizontal: 4,
+    borderWidth: 1,
+    borderColor: '#c9b04e',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+  },
+
+  activePage: {
+    backgroundColor: '#c9b04e',
+  },
+
+  pageText: {
+    color: '#c9b04e',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+
+  activePageText: {
+    color: '#fff',
+  },
+
+  dots: {
+    marginHorizontal: 6,
+    fontSize: 16,
   },
 });
-
-export default styles;

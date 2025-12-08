@@ -208,8 +208,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'poppins_bold',
-    fontSize: wp(6.5),
-    fontWeight: '700',
+    fontSize: wp(5.5),
     color: '#727271',
   },
   content: {
@@ -242,23 +241,22 @@ const styles = StyleSheet.create({
     width: hp(5),
   },
   profileName: {
-    fontSize: wp(5.5),
+    fontSize: wp(5),
     fontWeight: '600',
     color: '#121212',
     marginBottom: hp(0.5),
   },
   profileId: {
-    fontSize: wp(4),
+    fontSize: wp(3.8),
     color: '#9f9f9f',
   },
   filesSection: {
     paddingVertical: hp(2),
   },
   sectionTitle: {
-    fontSize: wp(5),
-    fontWeight: '700',
-    color: '#fffdf4',
+    fontSize: wp(4.5),
     fontFamily: 'poppins_bold',
+    color: '#fffdf4',
     textAlign: 'center',
     paddingVertical: hp(1.5),
   },
@@ -279,15 +277,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#efe5c2',
   },
   fileCardTitle: {
-    fontSize: wp(4),
-    fontWeight: 'bold',
-    color: '#593708',
+    fontSize: wp(3.8),
     fontFamily: 'poppins_bold',
+    color: '#593708',
     marginBottom: hp(1),
     textAlign: 'center',
   },
   fileCardCount: {
-    fontSize: wp(4.5),
+    fontSize: wp(4),
     fontWeight: '400',
     color: '#593708',
   },
@@ -305,10 +302,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#F0F0F0',
   },
   menuText: {
-    fontSize: wp(4.2),
+    fontSize: wp(4),
     color: '#6d6d6d',
     fontFamily: 'poppins_extralight',
-    fontWeight: '700',
   },
   logoutItem: {
     marginTop: hp(2),

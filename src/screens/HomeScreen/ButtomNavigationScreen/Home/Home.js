@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
   Alert,
   RefreshControl,
+  Platform,
+  StatusBar,
 } from 'react-native';
 import * as DocumentPicker from '@react-native-documents/picker';
 
@@ -34,7 +36,6 @@ import {
 import styles from './HomeStyles';
 import { useDispatch } from 'react-redux';
 import { login } from '../../../../redux/slices/authSlice';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -95,6 +96,7 @@ const Home = ({ navigation }) => {
       const invoices = response?.data?.invoices || [];
 
       setFullData(invoices);
+      handlePagination(1); // Initialize first page
 
     } catch (error) {
       console.log('Error UserDetails:', error);
@@ -204,25 +206,24 @@ const Home = ({ navigation }) => {
     }
   };
 
-const handleSearch = (text = "") => {
-  console.log("search text:", text);
+  const handleSearch = (text = "") => {
+    console.log("search text:", text);
 
-  const query = typeof text === "string" ? text : "";
+    const query = typeof text === "string" ? text : "";
 
-  if (!query.trim()) {
-    handlePagination(1);  // reset pagination
-    return;
-  }
+    if (!query.trim()) {
+      handlePagination(1);  // reset pagination
+      return;
+    }
 
-  const filtered = fullData.filter(item =>
-    item?.label?.toLowerCase().includes(query.toLowerCase()) ||
-    item?.file?.toLowerCase().includes(query.toLowerCase())
-  );
+    const filtered = fullData.filter(item =>
+      item?.label?.toLowerCase().includes(query.toLowerCase()) ||
+      item?.file?.toLowerCase().includes(query.toLowerCase())
+    );
 
-  setDisplayData(filtered.slice(0, limit));
-  setCurrentPage(1);
-};
-
+    setDisplayData(filtered.slice(0, limit));
+    setCurrentPage(1);
+  };
 
   const fetchDocuments = async (startDate, endDate) => {
     console.log('Filter dates:', startDate, endDate);
@@ -274,7 +275,9 @@ const handleSearch = (text = "") => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      
       {/* Loader Overlay */}
       {loading && (
         <View style={styles.loaderOverlay}>
@@ -360,7 +363,7 @@ const handleSearch = (text = "") => {
             />
             <Text style={styles.emptyTitle}>No Invoices Found</Text>
             <Text style={styles.emptySubtitle}>
-              You haven’t uploaded any invoices yet.
+              You haven't uploaded any invoices yet.
             </Text>
             <TouchableOpacity
               style={styles.uploadButton}
@@ -469,7 +472,7 @@ const handleSearch = (text = "") => {
           await UploadDocument(selectedFile);
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

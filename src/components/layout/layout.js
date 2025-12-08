@@ -1,17 +1,18 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import BottomNav from '../bottomNav/bottomNav';
 import ScreenWrapper from '../safeAreaViewWrapper/ScreenWrapper';
 
 const Layout = ({ children }) => {
   return (
     <View style={styles.container}>
-      {/* Wrap only the content in ScreenWrapper */}
-      <ScreenWrapper style={styles.content} >
+      
+      {/* Main content area */}
+      <ScreenWrapper edges={['left', 'right', 'bottom']} style={styles.content}>
         {children}
       </ScreenWrapper>
 
-      {/* Persistent BottomNav, always at the bottom */}
+      {/* Fixed bottom navigation */}
       <BottomNav />
     </View>
   );
@@ -20,11 +21,12 @@ const Layout = ({ children }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between', // Ensure space is divided, with BottomNav always at the bottom
+    backgroundColor: "#fff",
   },
   content: {
-    // flex: 1, // Take up all remaining space above the BottomNav
-    paddingBottom:0
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? 20 : 0, // iOS top push removed
+    paddingBottom: 0,
   },
 });
 
