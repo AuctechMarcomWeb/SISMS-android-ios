@@ -22,48 +22,46 @@ const RegisteredEmail = () => {
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <HeaderWithoutTitle />
 
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? hp(3) : 0}
-      >
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: 'center',
-            paddingHorizontal: wp(5),
-          }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Title */}
-          <Text style={styles.title}>Enter Your Registered Email</Text>
+   <KeyboardAvoidingView
+  style={{ flex: 1 }}
+  behavior={Platform.OS === 'ios' ? 'position' : undefined}
+  keyboardVerticalOffset={Platform.OS === 'ios' ? hp(1) : 0}
+>
+  <ScrollView
+    contentContainerStyle={{
+      flexGrow: 1,
+      paddingHorizontal: wp(5),
+      paddingTop: hp(5),   // controlled spacing
+    }}
+    keyboardShouldPersistTaps="handled"
+    showsVerticalScrollIndicator={false}
+  >
+    <Text style={styles.title}>Enter Your Registered Email</Text>
 
-          {/* Input */}
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Your Email"
-              placeholderTextColor="#999"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              cursorColor={'#8B4513'}
-              autoComplete="email"
-            />
-          </View>
+    <View style={styles.inputContainer}>
+      <TextInput
+        style={styles.input}
+        placeholder="Your Email"
+        placeholderTextColor="#999"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        cursorColor={'#8B4513'}
+        autoComplete="email"
+      />
+    </View>
 
-          {/* Button */}
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleGetOTP}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.buttonText}>Get OTP</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </KeyboardAvoidingView>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={handleGetOTP}
+      activeOpacity={0.8}
+    >
+      <Text style={styles.buttonText}>Get OTP</Text>
+    </TouchableOpacity>
+  </ScrollView>
+</KeyboardAvoidingView>
+
     </View>
   );
 };
@@ -75,14 +73,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: wp(6),
-    fontWeight: '700',
-    color: '#8B4513',
-    marginBottom: hp(3),
-    marginTop: hp(2),
-    fontFamily: 'poppins_bold',
-  },
+title: {
+  fontSize: wp(6),
+  fontWeight: '700',
+  color: '#8B4513',
+  marginBottom: hp(2),
+  fontFamily: 'poppins_bold',
+  textAlign: 'center',
+},
+
 
   inputContainer: {
     marginBottom: hp(4),

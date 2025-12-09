@@ -41,7 +41,12 @@ const BottomNav = () => {
 
   return (
     <SafeAreaView edges={['bottom']} style={{ backgroundColor: '#fff' }}>
-      <View style={[styles.bottomNav, { paddingBottom: insets.bottom / 2 }]}>
+      <View
+        style={[
+          styles.bottomNav,
+          { paddingBottom: insets.bottom > 0 ? insets.bottom - 4 : 6 },
+        ]}
+      >
         {tabs.map((tab, index) => {
           const isActive = activeTab === index;
           return (
