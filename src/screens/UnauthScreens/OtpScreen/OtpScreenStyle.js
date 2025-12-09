@@ -5,121 +5,91 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F0E8',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 6 : hp(0.5),
   },
+
   scrollContent: {
     flexGrow: 1,
-  },
-  header: {
-    paddingHorizontal: wp(3),
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
-  },
-  logo: {
-    width: wp(35),
-    height: hp(4),
+    justifyContent: 'center',
+    paddingBottom: hp(4),
   },
 
   mainContent: {
-    flex: 1,
     paddingHorizontal: wp(6),
     alignItems: 'center',
-    paddingBottom: hp(3), // Add bottom padding for better spacing
   },
+
   illustrationContainer: {
+    marginTop: hp(4),
+    marginBottom: hp(3),
+    width: '100%',
     alignItems: 'center',
-    marginTop: hp(3),
-    marginBottom: hp(4),
   },
+
   illustration: {
     width: wp(85),
-    height: hp(35),
+    height: hp(32),
   },
+
   textContainer: {
-    marginBottom: hp(2),
-    alignItems: 'flex-start',
     width: '100%',
-    paddingHorizontal: wp(1),
+    marginBottom: hp(3),
   },
+
   title: {
-    fontSize: wp(5.5),
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+    fontSize: wp(5.4),
+    fontWeight: '700',
     color: '#8B4513',
-    textAlign: 'left',
-    lineHeight: wp(8),
-    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
+    lineHeight: wp(7.4),
   },
+
   subtitle: {
-    fontSize: wp(4.5),
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+    fontSize: wp(4.4),
+    fontWeight: '600',
     color: '#8B4513',
-    textAlign: 'left',
-    lineHeight: wp(8),
-    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
+    marginTop: hp(0.8),
   },
+
   dotsContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: hp(5),
-    gap: wp(2.5),
+    gap: wp(2),
+    marginTop: hp(2),
+    marginBottom: hp(4),
   },
-  dot: {
-    width: wp(12),
-    height: wp(12),
-    borderRadius: wp(6),
-    backgroundColor: '#E8E8E8',
-    borderWidth: 1,
-    borderColor: '#D0D0D0',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-      },
-      android: {
-        elevation: 1,
-      },
-    }),
+
+  otpText: {
+    fontSize: wp(4),
+    fontWeight: '400',
+    color: 'green',
+    marginBottom: hp(2),
   },
-  activeDot: {
-    backgroundColor: '#C4C4C4',
-  },
+
   loginButton: {
+    width: '83%',
     backgroundColor: '#8B4513',
-    paddingHorizontal: wp(7),
-    paddingVertical: hp(2),
-    borderRadius: wp(4),
-    marginBottom: hp(5),
+    paddingVertical: hp(1.8),
+    borderRadius: wp(3),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: hp(1),
+    marginBottom: hp(4),
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.22,
+        shadowOffset: { width: 0, height: 3 },
         shadowRadius: 4,
       },
       android: {
-        elevation: 4,
+        elevation: 6,
       },
     }),
-    minHeight: Platform.OS === 'ios' ? 44 : 48,
-    justifyContent: 'center',
   },
+
   loginButtonText: {
-    color: '#FFFFFF',
-    fontSize: wp(4.2),
-    fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
-    textAlign: 'center',
-    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
+    fontSize: wp(4.3),
+    color: '#fff',
+    fontWeight: '700',
   },
 });
 

@@ -2,7 +2,7 @@ import RNFetchBlob from 'react-native-blob-util';
 import Share from 'react-native-share';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { Alert } from 'react-native';
-
+import FileViewer from 'react-native-file-viewer';
 export const requestStoragePermission = async () => {
   console.log('function to ask for allowance');
   if (Platform.OS === 'android' && Platform.Version < 33) {
@@ -24,14 +24,17 @@ export const requestStoragePermission = async () => {
 };
 
 // Download function
-export const handleDownload = async (fileUrl, fileName) => {
+
+
+
+export const handleDownload = async (fileUrl, fileName) => {6
   console.log("Entered the handl donload function", fileUrl, fileName);
-  
+
   const { config, fs } = RNFetchBlob;
   const path =
     Platform.OS === 'android'
       ? `${fs.dirs.DownloadDir}/${fileName}`
-      : `${fs.dirs.DocumentDir}/${fileName}`; // iOS
+      : `${fs.dirs.DocumentDir}/${fileName}`;
 
   config({
     fileCache: true,
@@ -45,52 +48,23 @@ export const handleDownload = async (fileUrl, fileName) => {
     },
   })
     .fetch('GET', fileUrl)
-    .then(res => {
-      Alert.alert('File downloaded to: ' + res.path());
+    .then(async res => {
+      const filePath = res.path();
+      Alert.alert("Download complete", "Opening file...");
+
+      // 🔥 Open downloaded file
+      try {
+        await FileViewer.open(filePath, { showOpenWithDialog: true });
+      } catch (openErr) {
+        console.log("Error opening file:", openErr);
+        Alert.alert("Downloaded", "File saved but couldn't be opened automatically.");
+      }
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log("Download error:", err);
+      Alert.alert("Error", "Failed to download file.");
+    });
 };
-
-
-
-// export const handleDownload = async (fileUrl, fileName) => {6
-//   console.log("Entered the handl donload function", fileUrl, fileName);
-
-//   const { config, fs } = RNFetchBlob;
-//   const path =
-//     Platform.OS === 'android'
-//       ? `${fs.dirs.DownloadDir}/${fileName}`
-//       : `${fs.dirs.DocumentDir}/${fileName}`;
-
-//   config({
-//     fileCache: true,
-//     appendExt: 'pdf',
-//     path,
-//     addAndroidDownloads: {
-//       useDownloadManager: true,
-//       notification: true,
-//       path,
-//       description: 'Invoice PDF',
-//     },
-//   })
-//     .fetch('GET', fileUrl)
-//     .then(async res => {
-//       const filePath = res.path();
-//       Alert.alert("Download complete", "Opening file...");
-
-//       // 🔥 Open downloaded file
-//       try {
-//         await FileViewer.open(filePath, { showOpenWithDialog: true });
-//       } catch (openErr) {
-//         console.log("Error opening file:", openErr);
-//         Alert.alert("Downloaded", "File saved but couldn't be opened automatically.");
-//       }
-//     })
-//     .catch(err => {
-//       console.log("Download error:", err);
-//       Alert.alert("Error", "Failed to download file.");
-//     });
-// };
 
 
 

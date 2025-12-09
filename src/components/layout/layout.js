@@ -1,19 +1,35 @@
 import React from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BottomNav from '../bottomNav/bottomNav';
 import ScreenWrapper from '../safeAreaViewWrapper/ScreenWrapper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const Layout = ({ children }) => {
+  const insets = useSafeAreaInsets();
+
   return (
     <View style={styles.container}>
-      
-      {/* Main content area */}
-      <ScreenWrapper edges={['left', 'right', 'bottom']} style={styles.content}>
+      {/* Main content */}
+      <View
+        style={[
+          styles.content,
+          {
+            paddingTop: insets.top,
+            paddingBottom: hp(1),
+          },
+        ]}
+      >
         {children}
-      </ScreenWrapper>
+      </View>
 
-      {/* Fixed bottom navigation */}
-      <BottomNav />
+      {/* Bottom navigation fixed */}
+      <View style={{ paddingBottom: insets.bottom || hp(0.5) }}>
+        <BottomNav />
+      </View>
     </View>
   );
 };
@@ -21,12 +37,10 @@ const Layout = ({ children }) => {
 const styles = StyleSheet.create({       
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   content: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? 20 : 0, // iOS top push removed
-    paddingBottom: 0,
   },
 });
 

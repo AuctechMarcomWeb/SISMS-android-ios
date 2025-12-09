@@ -1,11 +1,17 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Linking, Platform } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Linking,
+  Platform,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { WebView } from 'react-native-webview';
 
 export default function AboutVideo() {
   // Replace with your video ID or URL
-  const videoId = 'L3Dp4oGkn3k';
+  const videoId = 'GS1ZVLW2X0c';
   const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
   // Function to open in YouTube App / Browser

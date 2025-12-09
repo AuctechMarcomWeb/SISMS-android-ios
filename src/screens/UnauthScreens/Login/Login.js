@@ -16,7 +16,10 @@ import ScreenWrapper from '../../../components/safeAreaViewWrapper/ScreenWrapper
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { login } from '../../../redux/slices/authSlice';
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import { setUserId, setUser } from '../../../redux/slices/authSlice';
 
 const Login = ({ navigation }) => {
@@ -88,15 +91,21 @@ const handleGetOTP = async () => {
     );
   };
 
-  return (
-    <ScreenWrapper>
-      {/* <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-      > */}
+return (
+  <ScreenWrapper>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
+    >
       <ScrollView
-        contentContainerStyle={styles.scrollViewContent}
+        contentContainerStyle={[
+          styles.scrollViewContent,
+          {
+            paddingTop: Platform.OS === "android" ? hp(2) : hp(1),
+            paddingBottom: hp(2),
+          },
+        ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
@@ -151,14 +160,15 @@ const handleGetOTP = async () => {
             disabled={isLoading}
           >
             <Text style={styles.otpButtonText}>
-              {isLoading ? 'Sending...' : 'Get OTP'}
+              {isLoading ? "Sending..." : "Get OTP"}
             </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      {/* </KeyboardAvoidingView> */}
-    </ScreenWrapper>
-  );
+    </KeyboardAvoidingView>
+  </ScreenWrapper>
+);
+
 };
 
 export default Login;

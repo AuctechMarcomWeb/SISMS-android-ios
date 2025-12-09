@@ -104,7 +104,7 @@ const Home = ({ navigation }) => {
   };
   useEffect(() => {
     if (fullData.length > 0) {
-      handlePagination(1); // auto show first page
+      handlePagination(1);
     }
   }, [fullData]);
 
