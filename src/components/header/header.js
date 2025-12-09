@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 16,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   searchContainer: {
     flexDirection: 'row',
