@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Layout from '../../../../components/layout/layout';
@@ -17,7 +18,7 @@ import { FetchUserDetails } from '../../../../API/authAPI/authAPI';
 
 const Setting = ({ navigation }) => {
   const dispatch = useDispatch();
-  const UserDetails = useSelector(state => state?.auth?.user?.user_data);
+
 
   const fetchLatestUserDetails = async () => {
     try {
@@ -37,25 +38,41 @@ const Setting = ({ navigation }) => {
       console.log("❌ Error fetching user:", error);
     }
   };
-
+console.log("sdfhsdfsdf",UserDetails)
   useEffect(() => {
     fetchLatestUserDetails();
   }, []);
-
-  const handleMenuPress = async menuItem => {
-    if (menuItem === 'Log Out') {
-      try {
-        await AsyncStorage.removeItem('token');
-        await AsyncStorage.removeItem('userId');
-        await AsyncStorage.removeItem('isAuthentication');
-        dispatch(logout());
-      } catch (error) {
-        console.log('Logout error', error);
-      }
-    } else {
-      navigation.navigate(menuItem);
-    }
-  };
+  const UserDetails = useSelector(state => state?.auth?.user?.user_data);
+const handleMenuPress = async menuItem => {
+  if (menuItem === 'Log Out') {
+    Alert.alert(
+      "Confirm Logout",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await AsyncStorage.removeItem('token');
+              await AsyncStorage.removeItem('userId');
+              await AsyncStorage.removeItem('isAuthentication');
+              dispatch(logout());
+            } catch (error) {
+              console.log('Logout error', error);
+            }
+          }
+        }
+      ]
+    );
+  } else {
+    navigation.navigate(menuItem);
+  }
+};
   return (
     // <View style={styles.container}>
     <Layout>
