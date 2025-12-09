@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    paddingTop: hp(1), // Same for both platforms
+    paddingTop: hp(1), 
     paddingHorizontal: wp(4),
     paddingBottom: hp(1),
   },
