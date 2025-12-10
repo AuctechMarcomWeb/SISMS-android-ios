@@ -108,13 +108,13 @@ const WalletScreen = () => {
           </View>
 
           {/* Add Credit Button */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.addCreditButton}
             onPress={handleAddCreditPress}
             activeOpacity={0.8}
           >
             <Text style={styles.addCreditText}>ADD CREDIT</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </Layout>
