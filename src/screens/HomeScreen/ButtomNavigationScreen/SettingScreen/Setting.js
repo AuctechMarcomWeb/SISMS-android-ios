@@ -155,12 +155,12 @@ const handleMenuPress = async menuItem => {
 
         {/* Menu Items */}
         <View style={styles.menuSection}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.menuItem}
             onPress={() => handleMenuPress('Wallet')}
           >
             <Text style={styles.menuText}>Wallet</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={styles.menuItem}
