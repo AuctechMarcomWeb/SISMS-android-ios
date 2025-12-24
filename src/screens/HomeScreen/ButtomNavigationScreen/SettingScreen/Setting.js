@@ -14,16 +14,15 @@ import { wp, hp } from '../../../../utils/Functions/Responsive';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setUser } from '../../../../redux/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FetchUserDetails } from '../../../../API/authAPI/authAPI';
+import { FetchUserDetails, DeleteSMSUser } from '../../../../API/authAPI/authAPI';
 
 const Setting = ({ navigation }) => {
   const dispatch = useDispatch();
 
-
   const fetchLatestUserDetails = async () => {
     try {
       const savedUserId = await AsyncStorage.getItem('userId');
-      console.log("====>",savedUserId)
+      console.log("====>", savedUserId);
       if (!savedUserId) return;
 
       const response = await FetchUserDetails({
@@ -38,43 +37,104 @@ const Setting = ({ navigation }) => {
       console.log("❌ Error fetching user:", error);
     }
   };
-console.log("sdfhsdfsdf",UserDetails)
+
   useEffect(() => {
     fetchLatestUserDetails();
   }, []);
+
   const UserDetails = useSelector(state => state?.auth?.user?.user_data);
-const handleMenuPress = async menuItem => {
-  if (menuItem === 'Log Out') {
+
+
+  const handleDeleteAccount = async () => {
     Alert.alert(
-      "Confirm Logout",
-      "Are you sure you want to logout?",
+      "Delete Account",
+      "Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.",
       [
         {
           text: "Cancel",
           style: "cancel"
         },
         {
-          text: "Logout",
+          text: "Delete",
           style: "destructive",
           onPress: async () => {
             try {
-              await AsyncStorage.removeItem('token');
-              await AsyncStorage.removeItem('userId');
-              await AsyncStorage.removeItem('isAuthentication');
-              dispatch(logout());
+              const savedUserId = await AsyncStorage.getItem('userId');
+              console.log(savedUserId)
+              
+              if (!savedUserId) {
+                Alert.alert("Error", "User ID not found. Please try logging in again.");
+                return;
+              }
+
+              // Call the delete API
+              const response = await DeleteSMSUser(savedUserId);
+              console.log(response)
+              
+              if (response) {
+                // Clear all stored data
+                await AsyncStorage.removeItem('token');
+                await AsyncStorage.removeItem('userId');
+                await AsyncStorage.removeItem('isAuthentication');
+                
+                // Logout user
+                dispatch(logout());
+                
+                // Show success message
+                Alert.alert(
+                  "Account Deleted",
+                  "Your account has been successfully deleted.",
+                  [{ text: "OK" }]
+                );
+              }
             } catch (error) {
-              console.log('Logout error', error);
+              console.log('Delete account error:', error);
+              Alert.alert(
+                "Error",
+                "Failed to delete account. Please try again later.",
+                [{ text: "OK" }]
+              );
             }
           }
         }
       ]
     );
-  } else {
-    navigation.navigate(menuItem);
-  }
-};
+  };
+
+  const handleMenuPress = async menuItem => {
+    if (menuItem === 'Log Out') {
+      Alert.alert(
+        "Confirm Logout",
+        "Are you sure you want to logout?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel"
+          },
+          {
+            text: "Logout",
+            style: "destructive",
+            onPress: async () => {
+              try {
+                await AsyncStorage.removeItem('token');
+                await AsyncStorage.removeItem('userId');
+                await AsyncStorage.removeItem('isAuthentication');
+                dispatch(logout());
+              } catch (error) {
+                console.log('Logout error', error);
+              }
+            }
+          }
+        ]
+      );
+    } else if (menuItem === 'Delete Account') {
+      handleDeleteAccount();
+    } else {
+      navigation.navigate(menuItem);
+    }
+  };
+
   return (
-    // <View style={styles.container}>
     <Layout>
       {/* Header */}
       <View style={styles.header}>
@@ -84,6 +144,7 @@ const handleMenuPress = async menuItem => {
           resizeMode="contain"
         />
       </View>
+      
       {/* Title Bar */}
       <View style={styles.titleBar}>
         <Text style={styles.titleText}>Setting</Text>
@@ -102,7 +163,7 @@ const handleMenuPress = async menuItem => {
                 UserDetails?.photo
                   ? { uri: UserDetails?.photo }
                   : require('../../../../assets/images/male.png')
-              } // You'll need to add this image
+              }
               style={styles.profileImage}
               resizeMode="cover"
             />
@@ -111,7 +172,7 @@ const handleMenuPress = async menuItem => {
               onPress={() => navigation.navigate('ProfileScreen')}
             >
               <Image
-                source={require('../../../../assets/images/edit.png')} // You'll need to add this image
+                source={require('../../../../assets/images/edit.png')}
                 style={styles.editIcon}
                 resizeMode="cover"
               />
@@ -155,13 +216,6 @@ const handleMenuPress = async menuItem => {
 
         {/* Menu Items */}
         <View style={styles.menuSection}>
-          {/* <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => handleMenuPress('Wallet')}
-          >
-            <Text style={styles.menuText}>Wallet</Text>
-          </TouchableOpacity> */}
-
           <TouchableOpacity
             style={styles.menuItem}
             onPress={() => handleMenuPress('ContactUs')}
@@ -196,6 +250,14 @@ const handleMenuPress = async menuItem => {
           >
             <Text style={[styles.menuText, styles.logoutText]}>Log Out</Text>
             <Feather name="log-out" size={20} color="#FF6B6B" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.menuItem, styles.deleteAccountItem]}
+            onPress={() => handleMenuPress('Delete Account')}
+          >
+            <Text style={[styles.menuText, styles.deleteAccountText]}>Delete Account</Text>
+            <Feather name="trash-2" size={20} color="#D32F2F" />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -255,7 +317,6 @@ const styles = StyleSheet.create({
     paddingTop: hp(7),
     backgroundColor: '#FFFFFF',
   },
-
   profileImageContainer: {
     position: 'relative',
     marginBottom: hp(2),
@@ -343,10 +404,18 @@ const styles = StyleSheet.create({
   },
   logoutItem: {
     marginTop: hp(2),
-    borderBottomWidth: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
   },
   logoutText: {
     color: '#FF6B6B',
+    fontWeight: '500',
+  },
+  deleteAccountItem: {
+    borderBottomWidth: 0,
+  },
+  deleteAccountText: {
+    color: '#D32F2F',
     fontWeight: '500',
   },
 });

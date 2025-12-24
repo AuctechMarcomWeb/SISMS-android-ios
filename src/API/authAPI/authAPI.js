@@ -141,3 +141,28 @@ export const SearchSMS = async (params) => {
     throw error;
   }
 };
+
+
+export const DeleteSMSUser = async (user_id) => {
+  console.log("🗑️ DeleteSMSUser user_id:", user_id);
+
+  try {
+    const response = await AuthAPI.post(
+      "/deleteUser",
+      `user_id=${user_id}`, // 🔥 IMPORTANT
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log("✅ DeleteSMSUser Response:", response);
+    return response;
+  } catch (error) {
+    console.error("❌ DeleteSMSUser Error:", error?.response || error);
+    throw error;
+  }
+};
+
+
