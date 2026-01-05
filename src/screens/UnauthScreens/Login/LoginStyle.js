@@ -2,21 +2,20 @@ import { StyleSheet, Platform } from 'react-native';
 import { wp, hp } from '../../../utils/Functions/Responsive';
 
 const styles = StyleSheet.create({
-
   scrollViewContent: {
     flexGrow: 1,
-    paddingBottom: hp(3),
+    paddingBottom: hp(4),
   },
 
   header: {
-    paddingTop: hp(1), 
-    paddingHorizontal: wp(4),
+    paddingTop: hp(2),
+    paddingHorizontal: wp(5),
     paddingBottom: hp(1),
   },
 
   logo: {
-    width: wp(35),
-    height: hp(4),
+    width: wp(38),
+    height: hp(4.5),
   },
 
   mainContent: {
@@ -27,142 +26,105 @@ const styles = StyleSheet.create({
 
   illustrationContainer: {
     alignItems: 'center',
-    marginBottom: hp(2),
-    marginTop: hp(1),
+    marginBottom: hp(2.5),
   },
 
   illustration: {
-    width: wp(75),
-    height: wp(55),
+    width: wp(78),
+    height: wp(58),
   },
 
   textContainer: {
-    paddingHorizontal: wp(1.5),
-    paddingVertical: wp(1.5),
-    marginBottom: hp(2),
+    marginBottom: hp(2.5),
   },
 
   title: {
-    fontSize: wp(5.5),
+    fontSize: wp(6),
     fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
     color: '#8B4513',
-    textAlign: 'left',
     lineHeight: wp(8),
-    marginBottom: hp(0.5),
+    marginBottom: hp(0.8),
   },
 
   subtitle: {
-    fontSize: wp(4.5),
-    fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
+    fontSize: wp(4.4),
     color: '#8B4513',
-    textAlign: 'left',
-    lineHeight: wp(8),
+    lineHeight: wp(6),
+    opacity: 0.85,
   },
 
   inputContainer: {
     marginTop: hp(1),
-    marginBottom: hp(2),
+    marginBottom: hp(2.5),
   },
 
-  phoneInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1.5,
-    borderColor: '#8B4513',
-    borderRadius: wp(1.9),
-    backgroundColor: '#FAFAFA',
-    paddingHorizontal: wp(2),
-    height: hp(7),
-    marginBottom: hp(1.5),
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 1,
-        },
-        shadowOpacity: 0.08,
-        shadowRadius: 2,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
-  },
+phoneInputContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: '#D6B08C', // softer brown
+  borderRadius: wp(3.5),
+  backgroundColor: '#FFF7F0', // 🔥 FILLED FEEL
+  paddingHorizontal: wp(4),
+  height: hp(6.2), // 🔥 smaller height (important)
+  marginBottom: hp(1.8),
 
-  countryCode: {
-    fontSize: wp(4.2),
-    color: '#8B4513',
-    fontWeight: Platform.OS === 'ios' ? '900' : 'bold',
-    marginRight: wp(4),
-    marginLeft: wp(3),
-  },
+  ...Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.06,
+      shadowRadius: 3,
+    },
+    android: {
+      elevation: 2,
+    },
+  }),
+},
 
-  phoneInput: {
-    flex: 1,
-    fontSize: wp(4.2),
-    color: '#333333',
-    fontWeight: Platform.OS === 'ios' ? '500' : 'normal',
-    paddingLeft: wp(2),
-    paddingVertical: Platform.OS === 'android' ? hp(1.5) : 0,
-  },
+phoneInput: {
+  flex: 1,
+  fontSize: wp(5.2),        // 🔥 thoda bada
+  color: '#222',
+  fontWeight: '600',
 
-  lostNumberButton: {
-    alignSelf: 'flex-end',
-    paddingRight: wp(2),
-    paddingVertical: hp(1),
-  },
+  letterSpacing: wp(1.6),  // 🔥 MOST IMPORTANT (text spread)
+  paddingVertical: 0,
+  textAlignVertical: 'center',
+},
 
-  lostNumberText: {
-    color: '#6B46C1',
-    fontSize: wp(4),
-    fontWeight: Platform.OS === 'ios' ? '500' : 'normal',
-    textDecorationLine: 'underline',
-  },
 
   otpButton: {
     backgroundColor: '#8B4513',
-    paddingHorizontal: wp(10),
-    paddingVertical: hp(1.8),
-    alignSelf: 'center',
-    borderRadius: wp(4),
-    marginBottom: hp(2),
+    paddingVertical: hp(2),
+    borderRadius: wp(5),
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: hp(1),
+    marginBottom: hp(2),
     ...Platform.select({
       ios: {
         shadowColor: '#8B4513',
-        shadowOffset: {
-          width: 0,
-          height: 3,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.35,
+        shadowRadius: 5,
       },
       android: {
-        elevation: 4,
+        elevation: 5,
       },
     }),
   },
 
   otpButtonDisabled: {
-    backgroundColor: '#A0A0A0',
-    ...Platform.select({
-      ios: {
-        shadowOpacity: 0.1,
-      },
-      android: {
-        elevation: 1,
-      },
-    }),
+    backgroundColor: '#B0B0B0',
+    elevation: 1,
   },
 
   otpButtonText: {
-    color: '#FFFFFF',
-    fontSize: wp(4.2),
-    fontWeight: Platform.OS === 'ios' ? '600' : 'bold',
-    textAlign: 'center',
-    letterSpacing: 0.5,
+    color: '#FFF',
+    fontSize: wp(4.6),
+    fontWeight: '700',
+    letterSpacing: 0.8,
   },
 });
 

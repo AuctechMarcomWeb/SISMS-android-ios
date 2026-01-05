@@ -28,60 +28,59 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const handleGetOTP = async () => {
-  console.log("📞 Entered Phone =>", mobileNumber);
+    console.log('📞 Entered Phone =>', mobileNumber);
 
-  if (!mobileNumber.trim()) {
-    Alert.alert('Error', 'Please enter your mobile number');
-    return;
-  }
-
-  if (mobileNumber.length !== 10) {
-    Alert.alert('Error', 'Please enter a valid 10-digit mobile number');
-    return;
-  }
-
-  setIsLoading(true);
-
-  try {
-    const response = await LoginAPI({ phone: mobileNumber });
-
-    console.log("📦 API Raw Response =>", response?.data);
-
-    const userId = response?.data?.id;
-    const otp = response?.data?.otp;
-
-    console.log("🆔 Extracted userId =>", userId);
-    console.log("🔐 OTP Received =>", otp);
-
-    // ✅ FIX: AsyncStorage requires STRING
-    await AsyncStorage.setItem("userId", String(userId));
-
-    console.log("📍 Saved to AsyncStorage =>", String(userId));
-
-    dispatch(setUserId(userId));
-    dispatch(setUser({ phone: mobileNumber, id: userId }));
-
-    console.log("🟢 Redux Updated =>", {
-      userId,
-      user: { phone: mobileNumber, id: userId },
-    });
-
-    setIsLoading(false);
-
-    if (otp) {
-      navigation.navigate("OtpScreen", {
-        otpsend: otp,
-        phone: mobileNumber,
-      });
+    if (!mobileNumber.trim()) {
+      Alert.alert('Error', 'Please enter your mobile number');
+      return;
     }
 
-    Alert.alert("Success", `OTP sent to +91${mobileNumber}`);
-  } catch (error) {
-    console.log("❌ Error occurred while login =>", error);
-    setIsLoading(false);
-  }
-};
+    if (mobileNumber.length !== 10) {
+      Alert.alert('Error', 'Please enter a valid 10-digit mobile number');
+      return;
+    }
 
+    setIsLoading(true);
+
+    try {
+      const response = await LoginAPI({ phone: mobileNumber });
+
+      console.log('📦 API Raw Response =>', response?.data);
+
+      const userId = response?.data?.id;
+      const otp = response?.data?.otp;
+
+      console.log('🆔 Extracted userId =>', userId);
+      console.log('🔐 OTP Received =>', otp);
+
+      // ✅ FIX: AsyncStorage requires STRING
+      await AsyncStorage.setItem('userId', String(userId));
+
+      console.log('📍 Saved to AsyncStorage =>', String(userId));
+
+      dispatch(setUserId(userId));
+      dispatch(setUser({ phone: mobileNumber, id: userId }));
+
+      console.log('🟢 Redux Updated =>', {
+        userId,
+        user: { phone: mobileNumber, id: userId },
+      });
+
+      setIsLoading(false);
+
+      if (otp) {
+        navigation.navigate('OtpScreen', {
+          otpsend: otp,
+          phone: mobileNumber,
+        });
+      }
+
+      Alert.alert('Success', `OTP sent to ${mobileNumber}`);
+    } catch (error) {
+      console.log('❌ Error occurred while login =>', error);
+      setIsLoading(false);
+    }
+  };
 
   const handleLostNumber = () => {
     navigation.navigate('RegisteredEmail');
@@ -91,11 +90,22 @@ const Login = ({ navigation }) => {
     );
   };
 
+  const formatPhone = value => {
+    const digits = value.replace(/\D/g, '').slice(0, 10);
+
+    let result = '';
+    if (digits.length > 0) result += digits.slice(0, 3);
+    if (digits.length > 3) result += ' ' + digits.slice(3, 6);
+    if (digits.length > 6) result += ' ' + digits.slice(6, 10);
+
+    return result;
+  };
+
   return (
     <ScreenWrapper>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={0}
       >
         <ScrollView
@@ -128,16 +138,22 @@ const Login = ({ navigation }) => {
 
             <View style={styles.inputContainer}>
               <View style={styles.phoneInputContainer}>
-                <Text style={styles.countryCode}>+91</Text>
+                <Text style={styles.countryCode}></Text>
                 <TextInput
                   style={styles.phoneInput}
                   placeholder="Mobile number"
                   placeholderTextColor="#999"
                   cursorColor={'#8B4513'}
                   value={mobileNumber}
-                  onChangeText={setMobileNumber}
-                  keyboardType="phone-pad"
-                  maxLength={10}
+                  onChangeText={text => {
+                    // 🔥 ONLY NUMBERS ALLOWED
+                    const numericText = text.replace(/[^0-9]/g, '');
+                    setMobileNumber(numericText);
+                  }}
+                  keyboardType="number-pad"
+                  maxLength={15}
+                  inputMode="numeric" // ✅ Android + iOS (new)
+                  returnKeyType="done"
                 />
               </View>
 
@@ -155,7 +171,7 @@ const Login = ({ navigation }) => {
               disabled={isLoading}
             >
               <Text style={styles.otpButtonText}>
-                {isLoading ? "Sending..." : "Get OTP"}
+                {isLoading ? 'Sending...' : 'Get OTP'}
               </Text>
             </TouchableOpacity>
           </View>
