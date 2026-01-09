@@ -109,7 +109,7 @@ const Login = ({ navigation }) => {
 
     try {
       const fullPhone = selectedCountryCode.code + cleanNumber;
-      const response = await LoginAPI({ phone: fullPhone });
+      const response = await LoginAPI({ phone: cleanNumber });
 
       console.log('📦 API Raw Response =>', response?.data);
 
@@ -124,7 +124,7 @@ const Login = ({ navigation }) => {
       console.log('📍 Saved to AsyncStorage =>', String(userId));
 
       dispatch(setUserId(userId));
-      dispatch(setUser({ phone: fullPhone, id: userId }));
+      dispatch(setUser({ phone: cleanNumber, id: userId }));
 
       console.log('🟢 Redux Updated =>', {
         userId,
@@ -136,7 +136,7 @@ const Login = ({ navigation }) => {
       if (otp) {
         navigation.navigate('OtpScreen', {
           otpsend: otp,
-          phone: fullPhone,
+          phone: cleanNumber,
         });
       }
 
