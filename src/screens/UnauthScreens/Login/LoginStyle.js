@@ -55,59 +55,49 @@ const styles = StyleSheet.create({
 
   inputContainer: {
     marginTop: hp(1),
-    marginBottom: hp(2.5),
+    marginBottom: hp(2),
   },
 
-phoneInputContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  borderWidth: 1,
-  borderColor: '#D6B08C', // softer brown
-  borderRadius: wp(3.5),
-  backgroundColor: '#FFF7F0', // 🔥 FILLED FEEL
-  paddingHorizontal: wp(4),
-  height: hp(6.2), // 🔥 smaller height (important)
-  marginBottom: hp(1.8),
+  inputLabel: {
+    fontSize: wp(3.8),
+    fontWeight: '600',
+    color: '#8B4513',
+    marginBottom: hp(1),
+    marginLeft: wp(1),
+  },
 
-  ...Platform.select({
-    ios: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.06,
-      shadowRadius: 3,
-    },
-    android: {
-      elevation: 2,
-    },
-  }),
-},
-
-phoneInput: {
-  flex: 1,
-  fontSize: wp(5.2),        // 🔥 thoda bada
-  color: '#222',
-  fontWeight: '600',
-
-  letterSpacing: wp(1.6),  // 🔥 MOST IMPORTANT (text spread)
-  paddingVertical: 0,
-  textAlignVertical: 'center',
-},
-
-
-  otpButton: {
-    backgroundColor: '#8B4513',
-    paddingVertical: hp(2),
-    borderRadius: wp(5),
+  phoneInputContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: hp(1),
-    marginBottom: hp(2),
+    borderWidth: 2,
+    borderColor: '#E5D4C1',
+    borderRadius: wp(3),
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: wp(3),
+    height: hp(7),
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+
+  phoneInputContainerFocused: {
+    borderColor: '#8B4513',
+    borderWidth: 2,
+    backgroundColor: '#FFFBF7',
     ...Platform.select({
       ios: {
         shadowColor: '#8B4513',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.35,
-        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 6,
       },
       android: {
         elevation: 5,
@@ -115,16 +105,216 @@ phoneInput: {
     }),
   },
 
+  phoneInputContainerError: {
+    borderColor: '#E74C3C',
+    backgroundColor: '#FFF5F5',
+  },
+
+  countryCodeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: wp(2),
+    paddingVertical: hp(1),
+  },
+
+  countryFlag: {
+    fontSize: wp(6),
+    marginRight: wp(2),
+  },
+
+  countryCode: {
+    fontSize: wp(4.2),
+    fontWeight: '600',
+    color: '#2C3E50',
+    marginRight: wp(1),
+  },
+
+  dropdownArrow: {
+    fontSize: wp(2.5),
+    color: '#95A5A6',
+    marginLeft: wp(0.5),
+  },
+
+  separator: {
+    width: 1.5,
+    height: hp(4),
+    backgroundColor: '#E5D4C1',
+    marginHorizontal: wp(2.5),
+  },
+
+  phoneInput: {
+    flex: 1,
+    fontSize: wp(4.5),
+    color: '#2C3E50',
+    fontWeight: '500',
+    paddingVertical: 0,
+    paddingHorizontal: wp(2),
+    height: '100%',
+  },
+
+  clearButton: {
+    padding: wp(2),
+    marginLeft: wp(1),
+  },
+
+  clearButtonText: {
+    fontSize: wp(5),
+    color: '#95A5A6',
+    fontWeight: '300',
+  },
+
+  helperText: {
+    fontSize: wp(3.2),
+    marginTop: hp(0.8),
+    marginLeft: wp(1),
+    fontWeight: '500',
+  },
+
+  helperTextSuccess: {
+    color: '#27AE60',
+  },
+
+  helperTextError: {
+    color: '#E74C3C',
+  },
+
+  otpButton: {
+    backgroundColor: '#8B4513',
+    paddingVertical: hp(2.2),
+    borderRadius: wp(3),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: hp(1.5),
+    ...Platform.select({
+      ios: {
+        shadowColor: '#8B4513',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
+  },
+
   otpButtonDisabled: {
-    backgroundColor: '#B0B0B0',
-    elevation: 1,
+    backgroundColor: '#BDC3C7',
+    ...Platform.select({
+      ios: {
+        shadowOpacity: 0.1,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
 
   otpButtonText: {
-    color: '#FFF',
+    color: '#FFFFFF',
     fontSize: wp(4.6),
     fontWeight: '700',
-    letterSpacing: 0.8,
+    letterSpacing: 0.5,
+  },
+
+  privacyText: {
+    fontSize: wp(3.4),
+    color: '#7F8C8D',
+    textAlign: 'center',
+    marginTop: hp(2),
+    lineHeight: wp(5),
+    paddingHorizontal: wp(4),
+  },
+
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: wp(6),
+    borderTopRightRadius: wp(6),
+    maxHeight: '75%',
+    paddingBottom: hp(2),
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 10,
+      },
+    }),
+  },
+
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: wp(5),
+    paddingVertical: hp(2.5),
+    borderBottomWidth: 1,
+    borderBottomColor: '#ECF0F1',
+  },
+
+  modalTitle: {
+    fontSize: wp(5),
+    fontWeight: '700',
+    color: '#2C3E50',
+  },
+
+  closeButton: {
+    fontSize: wp(6.5),
+    color: '#95A5A6',
+    fontWeight: '300',
+  },
+
+  countryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: wp(5),
+    paddingVertical: hp(2),
+    borderBottomWidth: 1,
+    borderBottomColor: '#F8F9FA',
+  },
+
+  selectedCountryItem: {
+    backgroundColor: '#FFF7F0',
+    borderLeftWidth: 4,
+    borderLeftColor: '#8B4513',
+  },
+
+  countryItemFlag: {
+    fontSize: wp(7),
+    marginRight: wp(3),
+  },
+
+  countryItemTextContainer: {
+    flex: 1,
+  },
+
+  countryItemName: {
+    fontSize: wp(4.2),
+    fontWeight: '600',
+    color: '#2C3E50',
+    marginBottom: hp(0.3),
+  },
+
+  countryItemCode: {
+    fontSize: wp(3.8),
+    color: '#7F8C8D',
+    fontWeight: '500',
+  },
+
+  checkmark: {
+    fontSize: wp(5.5),
+    color: '#8B4513',
+    fontWeight: 'bold',
   },
 });
 
