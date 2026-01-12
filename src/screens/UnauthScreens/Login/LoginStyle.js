@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: wp(6),
     borderTopRightRadius: wp(6),
-    maxHeight: '75%',
+    maxHeight: '80%',
     paddingBottom: hp(2),
     ...Platform.select({
       ios: {
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: wp(5),
-    paddingVertical: hp(2.5),
+    paddingVertical: hp(2),
     borderBottomWidth: 1,
     borderBottomColor: '#ECF0F1',
   },
@@ -272,6 +272,44 @@ const styles = StyleSheet.create({
     fontSize: wp(6.5),
     color: '#95A5A6',
     fontWeight: '300',
+  },
+
+  // Search Bar Styles
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: wp(5),
+    marginVertical: hp(1.5),
+    paddingHorizontal: wp(4),
+    backgroundColor: '#F8F9FA',
+    borderRadius: wp(3),
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    height: hp(6),
+  },
+
+  searchIcon: {
+    fontSize: wp(4.5),
+    marginRight: wp(2),
+  },
+
+  searchInput: {
+    flex: 1,
+    fontSize: wp(4),
+    color: '#2C3E50',
+    paddingVertical: 0,
+  },
+
+  searchClearButton: {
+    padding: wp(2),
+  },
+
+  resultCount: {
+    fontSize: wp(3.5),
+    color: '#7F8C8D',
+    marginHorizontal: wp(5),
+    marginBottom: hp(1),
+    fontWeight: '500',
   },
 
   countryItem: {
@@ -315,6 +353,30 @@ const styles = StyleSheet.create({
     fontSize: wp(5.5),
     color: '#8B4513',
     fontWeight: 'bold',
+  },
+
+  emptyContainer: {
+    padding: wp(10),
+    alignItems: 'center',
+  },
+
+  emptyIcon: {
+    fontSize: wp(16),
+    marginBottom: hp(2),
+  },
+
+  emptyText: {
+    fontSize: wp(4.5),
+    color: '#2C3E50',
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: hp(0.5),
+  },
+
+  emptySubtext: {
+    fontSize: wp(3.5),
+    color: '#95A5A6',
+    textAlign: 'center',
   },
 });
 
