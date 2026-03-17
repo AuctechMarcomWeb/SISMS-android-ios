@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  Platform,
 } from 'react-native';
 import styles from './OtpScreenStyle';
 import InputBoxContainer from '../../../components/InputBoxContainer/InputBoxContainer';
@@ -22,61 +21,84 @@ const OtpScreen = ({ route }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const prevUser = useSelector(state => state.auth.user);
+
+  // phone = "966598844499" (no +, from Login)
   const { otpsend, phone } = route?.params || {};
 
-  const [user_otp, setUserOtp] = useState("");
+  const [user_otp, setUserOtp] = useState('');
 
- const handleLogin = async () => {
-  if (!user_otp || user_otp.length < 4) {
-    Alert.alert("Error", "Please enter valid OTP");
-    return;
-  }
-
-  try {
-    const response = await VerifyOTP({
-      phone,
-      user_otp: user_otp, // ✅ ensure string
-    });
-
-    console.log("✅ Verify OTP Response =>", response?.data);
-
-    const token = response?.data?.api_token;
-    const userId = response?.data?.id;
-
-    if (!token || !userId) {
-      Alert.alert("Invalid OTP", "Please try again");
+  const handleLogin = async () => {
+    if (!user_otp || user_otp.length < 4) {
+      Alert.alert('Error', 'Please enter a valid OTP');
       return;
     }
 
-    // ✅ AsyncStorage only accepts strings
-    await AsyncStorage.multiSet([
-      ["token", String(token)],
-      ["userId", String(userId)],
-    ]);
+    try {
+      console.log('📤 Verifying =>', { phone, user_otp });
 
-    dispatch(
-      login({
-        token,
-        userId: String(userId),
-        user: {
-          ...prevUser,
-          id: String(userId),
-        },
-      })
-    );
+      // ✅ FIX 1: Pass 'user_otp' key so unauthAPI sends correct param to backend
+      const response = await VerifyOTP({
+        phone: phone,
+        user_otp: user_otp,
+      });
 
-    // ✅ Navigate after successful login
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Home" }],
-    });
+      console.log('✅ VerifyOTP Response =>', JSON.stringify(response?.data, null, 2));
 
-  } catch (error) {
-    console.log("❌ Error verifying OTP =>", error);
-    Alert.alert("Error", "Something went wrong");
-  }
-};
+      // ✅ FIX 2: Token & id are nested inside response.data.data — not response.data
+      const responseData = response?.data;
+      const token = responseData?.api_token;
+      const userId = responseData?.id;
+      const registrationStatus = responseData?.status; // "NEW REGISTRATION" or "EXISTING"
 
+      console.log('🔑 Token =>', token);
+      console.log('👤 userId =>', userId);
+      console.log('📋 Status =>', registrationStatus);
+
+      if (!token || !userId) {
+        Alert.alert('Invalid OTP', 'OTP is incorrect. Please try again.');
+        return;
+      }
+
+      await AsyncStorage.multiSet([
+        ['token', String(token)],
+        ['userId', String(userId)],
+      ]);
+
+      dispatch(
+        login({
+          token,
+          userId: String(userId),
+          user: {
+            ...prevUser,
+            id: String(userId),
+          },
+        }),
+      );
+
+      // ✅ FIX 3: Handle new vs existing user routing if needed
+      if (registrationStatus === 'NEW REGISTRATION') {
+        // New user — navigate to profile/registration completion screen
+        // Uncomment and update screen name as needed:
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [{ name: 'CompleteProfile' }],
+        // });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
+      }
+
+    } catch (error) {
+      console.log('❌ OTP Error =>', JSON.stringify(error?.response?.data, null, 2));
+      Alert.alert('Error', error?.response?.data?.message || 'OTP verification failed. Try again.');
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -103,10 +125,6 @@ const OtpScreen = ({ route }) => {
             <View style={styles.dotsContainer}>
               <InputBoxContainer onChangeOtp={text => setUserOtp(text)} />
             </View>
-{/* 
-            {otpsend && (
-              <Text style={styles.otpText}>OTP: {otpsend}</Text>
-            )} */}
 
             <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
               <Text style={styles.loginButtonText}>Login</Text>
