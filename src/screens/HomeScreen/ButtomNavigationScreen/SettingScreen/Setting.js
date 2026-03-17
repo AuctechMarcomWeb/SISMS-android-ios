@@ -40,8 +40,8 @@ const Setting = ({ navigation }) => {
         userId: savedUserId,
         offset: 0,
       });
-
-      if (response?.user_data) {
+console.log("===>",response)
+      if (response?.data?.user_data) {
         dispatch(setUser(response));
       }
     } catch (error) {
@@ -61,7 +61,7 @@ const Setting = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
-  const UserDetails = useSelector(state => state?.auth?.user?.user_data);
+  const UserDetails = useSelector(state => state?.auth?.user?.data?.user_data);
 
   const handleDeleteAccount = async () => {
     Alert.alert(

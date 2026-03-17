@@ -18,9 +18,10 @@ import { FetchUserDetails, UpdateUserDetails } from '../../../../../API/authAPI/
 import { setUser, setUserId } from '../../../../../redux/slices/authSlice';
 import ScreenWrapper from '../../../../../components/safeAreaViewWrapper/ScreenWrapper';
 import { hp, wp } from '../../../../../utils/Functions/Responsive';
+
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const UserDetails = useSelector(state => state?.auth?.user?.user_data);
+  const UserDetails = useSelector(state => state?.auth?.user?.data?.user_data);
   console.log('===userDetails', UserDetails);
   const [phone] = useState(UserDetails?.phone);
   const [photo, setPhoto] = useState(UserDetails?.photo || null);
@@ -95,7 +96,7 @@ const ProfileScreen = ({ navigation }) => {
 
       const response = await UpdateUserDetails(formData);
 
-      if (response?.status === 200 && response.data?.status === 200) {
+      if (response) {
         dispatch(setUser({ user_data: response.data.data }));
         Alert.alert('Success', 'Profile updated successfully');
         navigation.goBack();
@@ -112,7 +113,7 @@ const ProfileScreen = ({ navigation }) => {
 
   const handleSelectGender = value => {
     setGender(value);
-    setDropdownVisible(false); // close dropdown
+    setDropdownVisible(false);
   };
 
   return (
@@ -123,6 +124,7 @@ const ProfileScreen = ({ navigation }) => {
           style={styles.logo}
         />
 
+        {/* Profile Image */}
         <View style={styles.profileImageContainer}>
           <Image
             source={
@@ -137,25 +139,14 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Phone number */}
-        {/* <TouchableOpacity
-          style={styles.inputContainer}
-          onPress={() =>
-            navigation.navigate('VerifyMobileNumber', {
-              phone: UserDetails?.phone,
-            })
-          }
-        >
-          <Text style={styles.inputText}>{phone}</Text>
-          <Icon name="edit" size={20} color="#CDA15B" />
-        </TouchableOpacity> */}
-
+        {/* ✅ FIX: Phone number row with visible edit icon */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputText}>{phone}</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('VerifyMobileNumber', { phone })}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            {/* <Icon name="edit" size={20} color="#CDA15B"/> */}
+            <Icon name="edit" size={20} color="#CDA15B" />
           </TouchableOpacity>
         </View>
 
@@ -217,10 +208,14 @@ const ProfileScreen = ({ navigation }) => {
             styles.updateButton,
             { opacity: name && email && gender ? 1 : 0.6 },
           ]}
-          disabled={!name || !email || !gender}
+          disabled={!name || !email || !gender || loading}
           onPress={updateProfile}
         >
-          <Text style={styles.updateText}>Update</Text>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.updateText}>Update</Text>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </ScreenWrapper>
@@ -232,7 +227,6 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     backgroundColor: '#fff',
-    // flexGrow: 1,
   },
   logo: {
     width: 100,
@@ -258,7 +252,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     padding: wp(2),
-    // borderRadius: 20,
   },
   inputContainer: {
     width: '100%',
