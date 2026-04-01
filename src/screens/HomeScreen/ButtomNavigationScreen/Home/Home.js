@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   StatusBar,
 } from 'react-native';
 import * as DocumentPicker from '@react-native-documents/picker';
-
+import { useFocusEffect } from '@react-navigation/native';
 import RNFetchBlob from 'react-native-blob-util';
 import Header from '../../../../components/header/header';
 import Layout from '../../../../components/layout/layout';
@@ -79,29 +79,39 @@ const Home = ({ navigation }) => {
   const onRefresh = async () => {
     try {
       setRefreshing(true);
-      await UserDetails(); // Refresh invoices
+      await UserDetails(false); // no overlay
     } catch (error) {
-      console.log('Error in pull-to-refresh:', error);
+      console.log('Refresh error:', error);
     } finally {
       setRefreshing(false);
     }
   };
 
-  const UserDetails = async () => {
+const UserDetails = async (showOverlay = true) => {
+  if (showOverlay) {
     setLoading(true);
-    const userId = await AsyncStorage.getItem('userId');
+  }
 
-    try {
-      const response = await FetchUserDetails({ userId, offset: 0 });
-      const invoices = response?.data?.invoices || [];
+  const userId = await AsyncStorage.getItem('userId');
 
-      setFullData(invoices);
-    } catch (error) {
-      console.log('Error UserDetails:', error);
-    } finally {
+  try {
+    const response = await FetchUserDetails({
+      userId,
+      offset: 0,
+    });
+
+    const invoices =
+      response?.data?.invoices || [];
+
+    setFullData(invoices);
+  } catch (error) {
+    console.log('Error UserDetails:', error);
+  } finally {
+    if (showOverlay) {
       setLoading(false);
     }
-  };
+  }
+};
   useEffect(() => {
     if (fullData.length > 0) {
       handlePagination(1);
@@ -209,26 +219,37 @@ const Home = ({ navigation }) => {
     }
   };
 
-  const handleSearch = (text = '') => {
-    console.log('search text:', text);
+  const handleSearch = async (text = '') => {
+    try {
+      const query = typeof text === 'string' ? text : '';
+      const userId = await AsyncStorage.getItem('userId');
 
-    const query = typeof text === 'string' ? text : '';
+      if (!query.trim()) {
+        await UserDetails();
+        return;
+      }
 
-    if (!query.trim()) {
-      handlePagination(1); // reset pagination
-      return;
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append('search', query);
+      formData.append('user_id', String(userId));
+      formData.append('offset', '0');
+
+      const response = await searchPDF(formData);
+
+      console.log('Search API response:', response?.data);
+
+      const invoices = response?.data?.data || [];
+      setFullData(invoices);
+      setDisplayData(invoices.slice(0, limit));
+      setCurrentPage(1);
+    } catch (error) {
+      console.log('Search API error:', error?.response?.data || error.message);
+    } finally {
+      setLoading(false);
     }
-
-    const filtered = fullData.filter(
-      item =>
-        item?.label?.toLowerCase().includes(query.toLowerCase()) ||
-        item?.file?.toLowerCase().includes(query.toLowerCase()),
-    );
-
-    setDisplayData(filtered.slice(0, limit));
-    setCurrentPage(1);
   };
-
   const fetchDocuments = async (startDate, endDate) => {
     console.log('Filter dates:', startDate, endDate);
     const userId = await AsyncStorage.getItem('UserID');
@@ -274,9 +295,15 @@ const Home = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    UserDetails();
-  }, []);
+  // useEffect(() => {
+  //   UserDetails();
+  // }, []);
+  useFocusEffect(
+    useCallback(() => {
+      UserDetails();
+      setModalVisible(false);
+    }, []),
+  );
 
   return (
     <View style={styles.container}>
@@ -456,7 +483,13 @@ const Home = ({ navigation }) => {
           description: selectedInvoice?.description || 'SELF',
           uploadedBy: selectedInvoice?.source_name || 'SELF',
         }}
-        onEdit={() => navigation.navigate('EditDocumentScreen')}
+        // onEdit={() => navigation.navigate('EditDocumentScreen')}
+        onEdit={() => {
+          setModalVisible(false);
+          navigation.navigate('EditDocumentScreen', {
+            documentData: selectedInvoice,
+          });
+        }}
         onShare={() => handleShare(selectedInvoice?.file)}
         onDownload={() =>
           handleDownload(

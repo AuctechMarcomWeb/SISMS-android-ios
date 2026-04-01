@@ -91,6 +91,24 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '700',
   },
+resendContainer: {
+  marginTop: hp(2),
+  alignItems: 'center',
+  flexDirection: 'row',
+  justifyContent: 'center',
+},
+
+resendLabel: {
+  fontSize: wp(3.8),
+  color: '#666',
+  fontWeight: '400',
+},
+
+resendButtonText: {
+  fontSize: wp(3.8),
+  color: '#007AFF',
+  fontWeight: '600',
+},
 });
 
 export default styles;

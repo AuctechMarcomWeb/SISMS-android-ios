@@ -5,19 +5,64 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { updateDocumentByUser } from '../../../../API/documentAPI/documentAPI';
+import { showToast } from '../../../../utils/toast';
+const EditDocumentScreen = ({ route, navigation }) => {
+  const { documentData } = route.params;
 
-const EditDocumentScreen = () => {
-  const [invoice, setInvoice] = useState('invoice');
-  const [party, setParty] = useState('party');
+  const [invoice, setInvoice] = useState(documentData?.label || '');
+  const [party, setParty] = useState(documentData?.description || '');
+  const [loading, setLoading] = useState(false);
+  const handleUpdate = async () => {
+    try {
+      setLoading(true);
 
-  const handleUpdate = () => {
-    // Handle update logic here
-    console.log('Invoice:', invoice);
-    console.log('Party:', party);
+      const userId = await AsyncStorage.getItem('userId');
+
+      const formData = new FormData();
+      formData.append('user_id', String(userId));
+      formData.append('docID', String(documentData?.docID));
+      formData.append('label', invoice);
+      formData.append('description', party);
+
+      console.log('Sending:', {
+        user_id: userId,
+        docID: documentData?.docID,
+        label: invoice,
+        description: party,
+      });
+
+      const response = await updateDocumentByUser(formData);
+
+      console.log('Response data:', response?.data);
+
+      showToast({
+        type: 'success',
+        title: 'Success',
+        message: response?.data?.message || 'Document updated successfully',
+      });
+
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1200);
+    } catch (error) {
+      console.log('API error:', error?.response?.data || error.message);
+
+      showToast({
+        type: 'error',
+        title: 'Update Failed',
+        message: error?.response?.data?.message || 'Something went wrong',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -28,7 +73,7 @@ const EditDocumentScreen = () => {
         <Text style={styles.title}>Edit Document details</Text>
 
         <Text style={styles.documentId}>
-          invoice_ORD-721488437916691317420108
+          {documentData?.file?.split('/').pop()}
         </Text>
 
         <TextInput
@@ -36,20 +81,26 @@ const EditDocumentScreen = () => {
           value={invoice}
           onChangeText={setInvoice}
           placeholder="Invoice"
-          placeholderTextColor="#888"
         />
 
         <TextInput
           style={[styles.input, styles.textArea]}
           value={party}
           onChangeText={setParty}
-          placeholder="Party"
-          placeholderTextColor="#888"
+          placeholder="Description"
           multiline
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-          <Text style={styles.buttonText}>UPDATE</Text>
+        <TouchableOpacity
+          style={[styles.button, loading && { opacity: 0.7 }]}
+          onPress={handleUpdate}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>UPDATE</Text>
+          )}
         </TouchableOpacity>
       </View>
     </SafeAreaView>

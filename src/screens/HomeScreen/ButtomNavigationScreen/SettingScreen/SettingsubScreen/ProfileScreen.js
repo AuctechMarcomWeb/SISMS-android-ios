@@ -14,10 +14,14 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { FetchUserDetails, UpdateUserDetails } from '../../../../../API/authAPI/authAPI';
+import {
+  FetchUserDetails,
+  UpdateUserDetails,
+} from '../../../../../API/authAPI/authAPI';
 import { setUser, setUserId } from '../../../../../redux/slices/authSlice';
 import ScreenWrapper from '../../../../../components/safeAreaViewWrapper/ScreenWrapper';
 import { hp, wp } from '../../../../../utils/Functions/Responsive';
+import { showToast } from '../../../../../utils/toast';
 
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -59,17 +63,29 @@ const ProfileScreen = ({ navigation }) => {
 
   const updateProfile = async () => {
     if (!name?.trim()) {
-      Alert.alert('Warning', 'Please enter your name');
+      showToast({
+        type: 'error',
+        title: 'Warning',
+        message: 'Please enter your name',
+      });
       return;
     }
 
     if (!email?.trim()) {
-      Alert.alert('Warning', 'Please enter your email');
+      showToast({
+        type: 'error',
+        title: 'Warning',
+        message: 'Please enter your email',
+      });
       return;
     }
 
     if (!gender) {
-      Alert.alert('Warning', 'Please select gender');
+      showToast({
+        type: 'error',
+        title: 'Warning',
+        message: 'Please select gender',
+      });
       return;
     }
 
@@ -98,19 +114,33 @@ const ProfileScreen = ({ navigation }) => {
 
       if (response) {
         dispatch(setUser({ user_data: response.data.data }));
-        Alert.alert('Success', 'Profile updated successfully');
+
+        showToast({
+          type: 'success',
+          title: 'Success',
+          message: 'Profile updated successfully',
+        });
+
         navigation.goBack();
       } else {
-        Alert.alert('Error', response.data?.message || 'Something went wrong');
+        showToast({
+          type: 'error',
+          title: 'Error',
+          message: response.data?.message || 'Something went wrong',
+        });
       }
     } catch (error) {
       console.log('❌ Error updating profile =>', error);
-      Alert.alert('Failed', 'Something went wrong');
+
+      showToast({
+        type: 'error',
+        title: 'Failed',
+        message: 'Something went wrong',
+      });
     } finally {
       setLoading(false);
     }
   };
-
   const handleSelectGender = value => {
     setGender(value);
     setDropdownVisible(false);
